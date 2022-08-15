@@ -1,10 +1,21 @@
 #!/bin/bash
-
 BUILD_DIR=$1
 
-PKG=poppler_22.08.0-1_amd64.deb
+INSTALL_DIR=$BUILD_DIR/vendor/poppler
 
-echo "Extracting $PKG..."
-mkdir -p $BUILD_DIR/.apt
-dpkg -x "$PKG" $BUILD_DIR/.apt/
-echo "Done"
+ENVSCRIPT=$BUILD_DIR/.profile.d/poppler.sh
+
+# Single quotes since we want $HOME to be resolved at runtime, not build time.
+POPPLER_DIR='${HOME}/vendor/poppler'
+
+echo "Untarring poppler.tar.gz into ${INSTALL_DIR}"
+
+mkdir -p $INSTALL_DIR
+tar -zxvf poppler_22.08.0-1_amd64.deb -C $INSTALL_DIR
+
+echo "Complete!"
+
+echo "Building runtime environment for poppler"
+mkdir -p $BUILD_DIR/.profile.d
+echo "export PATH=\"$POPPLER_DIR/bin:\$PATH\"" > $ENVSCRIPT
+echo "export LD_LIBRARY_PATH=\"$POPPLER_DIR/lib:\$LD_LIBRARY_PATH\"" >> $ENVSCRIPT
