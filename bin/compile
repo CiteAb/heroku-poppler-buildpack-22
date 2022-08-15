@@ -11,7 +11,7 @@ POPPLER_DIR='${HOME}/vendor/poppler'
 echo "Untarring poppler.tar.gz into ${INSTALL_DIR}"
 
 mkdir -p $INSTALL_DIR
-tar -zxvf poppler_22.08.0-1_amd64.deb -C $INSTALL_DIR
+dpkg -x poppler_22.08.0-1_amd64.deb $INSTALL_DIR
 
 echo "Complete!"
 
